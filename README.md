@@ -10,7 +10,7 @@ mvn package
 ## Execute
 ```bash
 # NatsPub
-java -cp /home/todd/.m2/repository/io/nats/jnats/2.13.1/jnats-2.13.1.jar:target/javanats-101-1.0-SNAPSHOT.jar net.beetsme.NatsPub -s "nats://UserA1:s3cr3t@localhost:4222" foo "hello java"
+java -cp /home/todd/.m2/repository/io/nats/jnats/2.16.8/jnats-2.16.8.jar:target/javanats-101-1.0-SNAPSHOT.jar net.beetsme.NatsPub -s "nats://UserA1:s3cr3t@localhost:4222" foo "hello java"
 ```
 
 ## Resources
