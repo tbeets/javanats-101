@@ -47,7 +47,7 @@ public class NatsJsPullSubNoWaitEphemeral {
             // Build our consumer configuration and subscription options.
             // make sure the ack wait is sufficient to handle the reading and processing of the batch.
             ConsumerConfiguration cc = ConsumerConfiguration.builder()
-                    .idleHeartbeat(Duration.ofSeconds(10))
+                    // .idleHeartbeat(Duration.ofSeconds(10))
                     .ackWait(Duration.ofMillis(2500))
                     .build();
 
