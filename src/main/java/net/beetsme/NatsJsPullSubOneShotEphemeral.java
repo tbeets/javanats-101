@@ -19,12 +19,13 @@ import io.nats.client.api.ConsumerConfiguration;
 import java.time.Duration;
 
 /**
- * This example will demonstrate basic use of a pull subscription of:
- * expires in pull: <code>pullExpiresIn(int batchSize, Duration or Millis expiresIn)</code>
+ * This example will demonstrate basic use of a pull subscription leveraging OneShot pattern
+ * which combines NoWait with an expiry, telling the server to return immediately if messages to deliver
+ * but hold the request until messages to deliver or expiry (whichever comes first).
  */
-public class NatsJsPullSubNoWaitEphemeral {
+public class NatsJsPullSubOneShotEphemeral {
     static final String usageString =
-        "\nUsage: java -cp <classpath> NatsJsPullSubNoWaitEphemeral [-s server] [-strm stream] [-sub subject]"
+        "\nUsage: java -cp <classpath> NatsJsPullSubOneShotEphemeral [-s server] [-strm stream] [-sub subject]"
             + "\n\nDefault Values:"
             + "\n   [-strm] expires-in-stream"
             + "\n   [-sub]  expires-in-subject"
@@ -34,7 +35,7 @@ public class NatsJsPullSubNoWaitEphemeral {
             + "\nUse the URL in the -s server parameter for user/pass/token authentication.\n";
 
     public static void main(String[] args) {
-        ExampleArgs exArgs = ExampleArgs.builder("Pull Subscription using primitive Batch With NoWait - Ephemeral", args, usageString)
+        ExampleArgs exArgs = ExampleArgs.builder("Pull Subscription using primitive Batch With OneShot - Ephemeral", args, usageString)
             .defaultStream("expires-in-stream")
             .defaultSubject("expires-in-subject")
             .build();
