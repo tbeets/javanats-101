@@ -48,7 +48,6 @@ public class NatsJsPullSubOneShotEphemeral {
             // Build our consumer configuration and subscription options.
             // make sure the ack wait is sufficient to handle the reading and processing of the batch.
             ConsumerConfiguration cc = ConsumerConfiguration.builder()
-                    // .idleHeartbeat(Duration.ofSeconds(10))
                     .ackWait(Duration.ofMillis(2500))
                     .build();
 
@@ -60,23 +59,17 @@ public class NatsJsPullSubOneShotEphemeral {
             JetStreamSubscription sub = js.subscribe(exArgs.subject, pullOptions);
             nc.flush(Duration.ofSeconds(1));
 
-            // application decides size of message batch and expiry of each batch request
-            // application decides whether to loop forever, or a number of batch requests
-            int maxBatchRequests = 5;
-            int batchRequest = 1;
-            while (batchRequest <= maxBatchRequests) {
-                sub.pullNoWait(10, Duration.ofSeconds(300));
-                Message m = sub.nextMessage(Duration.ofSeconds(1)); // first message
+            // Key "OneShot" pattern (nowait + expiry)
+            int oneShotWait = 300; // seconds for batch request to live with no pending messages
+            while (true) {
+                sub.pullNoWait(10, Duration.ofSeconds(oneShotWait));
+                Message m = sub.nextMessage(Duration.ofSeconds(oneShotWait+1)); // first message
                 while (m != null) {
-                    if (m.isJetStream()) {
-                        System.out.println("batch:" + batchRequest + ". " + m);
-                        m.ack();
-                    }
-                    m = sub.nextMessage(Duration.ofMillis(100)); // other messages should already be on the client
+                    System.out.println(m);
+                    m.ack();
+                    m = sub.nextMessage(Duration.ofMillis(50)); // other messages should already be on the client
                 }
-                batchRequest++;
             }
-
         }
         catch (Exception e) {
             e.printStackTrace();
